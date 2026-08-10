@@ -254,6 +254,26 @@ a{color:inherit;text-decoration:none}
 .langsel option{color:#111;background:#fff}
 .langsel-tool{background-color:var(--ink);border-color:var(--ink);border-radius:12px;padding:0 28px 0 14px;height:auto;align-self:stretch}
 
+
+/* bouton accès prix pro (bascule, façon nishman.be) */
+.probtn{display:inline-flex;align-items:center;gap:7px;font-family:'Oswald',sans-serif;font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#fff;background:var(--gold);border-radius:12px;padding:0 14px;cursor:pointer;white-space:nowrap;transition:background .15s}
+.probtn::before{content:"🔓";font-size:13px}
+.probtn.unlocked{background:var(--ink);color:var(--gold-l)}
+.probtn.unlocked::before{content:"🔒"}
+.probtn:hover{filter:brightness(1.08)}
+@media(max-width:520px){.probtn{padding:0 11px;font-size:11px}}
+
+/* saisie quantité au clavier */
+.qin{width:56px;text-align:center;font-family:'Oswald',sans-serif;font-weight:600;font-size:16px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:9px;padding:6px 2px;appearance:textfield;-moz-appearance:textfield}
+.qin::-webkit-outer-spin-button,.qin::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.qin:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(200,145,42,.15)}
+.qin-s{width:46px;font-size:14px;padding:4px 2px}
+/* fiche produit : image contenue, pas trop grande (façon nishman) */
+.modal .mimg{aspect-ratio:auto;height:min(36vh,320px);background:#f6f3ed;display:flex;align-items:center;justify-content:center}
+.modal .mimg img{width:auto;height:84%;max-width:82%;object-fit:contain}
+/* confort tactile */
+.modal .panel,.drawer .panel,.dbody,.catpanel .sheet2{overscroll-behavior:contain}
+button,.qin,.langsel{touch-action:manipulation}
 </style>
 </head>
 <body class="noscroll">
@@ -306,6 +326,7 @@ a{color:inherit;text-decoration:none}
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
       </button>
       <select class="langsel langsel-tool" id="langTool" aria-label="Langue"><option value="fr">FR</option><option value="en">EN</option><option value="nl">NL</option><option value="de">DE</option></select>
+      <button class="probtn" id="proBtn"></button>
     </div>
   </div>
 
@@ -359,10 +380,10 @@ const FAM_ORDER = ["Cires & Pommades", "Poudres coiffantes", "Poudres capillaire
 const WA = "32489970087";
 
 const I18N = {
-  fr:{eyebrow:"Pirates of the Barbertime",title:"Collection",subtitle:"La gamme professionnelle",refs:"références",lockmsg:"Les <b>prix professionnels</b> sont réservés à nos revendeurs.",unlock:"Entrer un code",askcode:"Demander un accès",ok:"Valider",cart:"Panier",total:"Total HT",cartnote:"Devis envoyé via WhatsApp à notre service commercial.",sendwa:"Envoyer le devis",footer:"Catalogue professionnel — prix indicatifs",unit:"À l'unité",box:"Au carton",addcart:"Ajouter au panier",added:"Ajouté au panier",emptycart:"Votre panier est vide.",pricehidden:"Prix sur demande",each:"/u",items:"articles",item:"article",refs2:"réf.",viewcart:"Voir le panier",all:"Toutes les catégories",cattitle:"Catégories",search:"Rechercher un produit, un EAN…",noresult:"Aucun produit ne correspond à votre recherche.",askwa:"Bonjour, je souhaite obtenir un code d'accès aux prix professionnels Barbertime.",quotehdr:"Bonjour, voici ma demande de devis Barbertime :",codeok:"Prix débloqués.",codeerr:"Code invalide.",nodesc:"Description détaillée à venir."},
-  en:{eyebrow:"Pirates of the Barbertime",title:"Collection",subtitle:"The professional line",refs:"products",lockmsg:"<b>Trade prices</b> are reserved for our resellers.",unlock:"Enter a code",askcode:"Request access",ok:"Apply",cart:"Cart",total:"Total excl. tax",cartnote:"Quote sent via WhatsApp to our sales team.",sendwa:"Send quote",footer:"Professional catalogue — indicative prices",unit:"Per unit",box:"Per box",addcart:"Add to cart",added:"Added to cart",emptycart:"Your cart is empty.",pricehidden:"Price on request",each:"/ea",items:"items",item:"item",refs2:"refs",viewcart:"View cart",all:"All categories",cattitle:"Categories",search:"Search a product, an EAN…",noresult:"No product matches your search.",askwa:"Hello, I would like an access code for Barbertime trade prices.",quotehdr:"Hello, here is my Barbertime quote request:",codeok:"Prices unlocked.",codeerr:"Invalid code.",nodesc:"Detailed description coming soon."},
-  nl:{eyebrow:"Pirates of the Barbertime",title:"Collectie",subtitle:"Het professionele gamma",refs:"producten",lockmsg:"<b>Handelsprijzen</b> zijn voorbehouden aan onze verdelers.",unlock:"Code invoeren",askcode:"Toegang aanvragen",ok:"Bevestig",cart:"Winkelmand",total:"Totaal excl. btw",cartnote:"Offerte via WhatsApp naar onze verkoopdienst.",sendwa:"Offerte versturen",footer:"Professionele catalogus — indicatieve prijzen",unit:"Per stuk",box:"Per doos",addcart:"Toevoegen",added:"Toegevoegd",emptycart:"Uw winkelmand is leeg.",pricehidden:"Prijs op aanvraag",each:"/st",items:"artikelen",item:"artikel",refs2:"refs",viewcart:"Winkelmand bekijken",all:"Alle categorieën",cattitle:"Categorieën",search:"Zoek een product, een EAN…",noresult:"Geen product komt overeen met uw zoekopdracht.",askwa:"Hallo, ik wil graag een toegangscode voor de Barbertime handelsprijzen.",quotehdr:"Hallo, hier is mijn Barbertime offerteaanvraag:",codeok:"Prijzen ontgrendeld.",codeerr:"Ongeldige code.",nodesc:"Gedetailleerde beschrijving binnenkort."},
-  de:{eyebrow:"Pirates of the",title:"Kollektion",subtitle:"Die Profi-Serie",refs:"Produkte",lockmsg:"<b>Händlerpreise</b> sind unseren Wiederverkäufern vorbehalten.",unlock:"Code eingeben",askcode:"Zugang anfragen",ok:"Bestätigen",cart:"Warenkorb",total:"Summe netto",cartnote:"Angebot per WhatsApp an unseren Vertrieb.",sendwa:"Angebot senden",footer:"Profi-Katalog — Richtpreise",unit:"Pro Stück",box:"Pro Karton",addcart:"In den Warenkorb",added:"Hinzugefügt",emptycart:"Ihr Warenkorb ist leer.",pricehidden:"Preis auf Anfrage",each:"/St",items:"Artikel",item:"Artikel",refs2:"Ref.",viewcart:"Warenkorb ansehen",all:"Alle Kategorien",cattitle:"Kategorien",search:"Produkt oder EAN suchen…",noresult:"Kein Produkt entspricht Ihrer Suche.",askwa:"Hallo, ich hätte gerne einen Zugangscode für die Barbertime-Händlerpreise.",quotehdr:"Hallo, hier ist meine Barbertime-Angebotsanfrage:",codeok:"Preise freigeschaltet.",codeerr:"Ungültige Code.",nodesc:"Ausführliche Beschreibung folgt."}
+  fr:{eyebrow:"Pirates of the Barbertime",title:"Collection",subtitle:"La gamme professionnelle",refs:"références",lockmsg:"Les <b>prix professionnels</b> sont réservés à nos revendeurs.",unlock:"Entrer un code",askcode:"Demander un accès",ok:"Valider",cart:"Panier",total:"Total HT",cartnote:"Devis envoyé via WhatsApp à notre service commercial.",sendwa:"Envoyer le devis",footer:"Catalogue professionnel — prix indicatifs",unit:"À l'unité",box:"Au carton",addcart:"Ajouter au panier",added:"Ajouté au panier",emptycart:"Votre panier est vide.",pricehidden:"Prix sur demande",each:"/u",items:"articles",item:"article",refs2:"réf.",viewcart:"Voir le panier",proshow:"Prix pro",prohide:"Masquer les prix",all:"Toutes les catégories",cattitle:"Catégories",search:"Rechercher un produit, un EAN…",noresult:"Aucun produit ne correspond à votre recherche.",askwa:"Bonjour, je souhaite obtenir un code d'accès aux prix professionnels Barbertime.",quotehdr:"Bonjour, voici ma demande de devis Barbertime :",codeok:"Prix débloqués.",codeerr:"Code invalide.",nodesc:"Description détaillée à venir."},
+  en:{eyebrow:"Pirates of the Barbertime",title:"Collection",subtitle:"The professional line",refs:"products",lockmsg:"<b>Trade prices</b> are reserved for our resellers.",unlock:"Enter a code",askcode:"Request access",ok:"Apply",cart:"Cart",total:"Total excl. tax",cartnote:"Quote sent via WhatsApp to our sales team.",sendwa:"Send quote",footer:"Professional catalogue — indicative prices",unit:"Per unit",box:"Per box",addcart:"Add to cart",added:"Added to cart",emptycart:"Your cart is empty.",pricehidden:"Price on request",each:"/ea",items:"items",item:"item",refs2:"refs",viewcart:"View cart",proshow:"Trade prices",prohide:"Hide prices",all:"All categories",cattitle:"Categories",search:"Search a product, an EAN…",noresult:"No product matches your search.",askwa:"Hello, I would like an access code for Barbertime trade prices.",quotehdr:"Hello, here is my Barbertime quote request:",codeok:"Prices unlocked.",codeerr:"Invalid code.",nodesc:"Detailed description coming soon."},
+  nl:{eyebrow:"Pirates of the Barbertime",title:"Collectie",subtitle:"Het professionele gamma",refs:"producten",lockmsg:"<b>Handelsprijzen</b> zijn voorbehouden aan onze verdelers.",unlock:"Code invoeren",askcode:"Toegang aanvragen",ok:"Bevestig",cart:"Winkelmand",total:"Totaal excl. btw",cartnote:"Offerte via WhatsApp naar onze verkoopdienst.",sendwa:"Offerte versturen",footer:"Professionele catalogus — indicatieve prijzen",unit:"Per stuk",box:"Per doos",addcart:"Toevoegen",added:"Toegevoegd",emptycart:"Uw winkelmand is leeg.",pricehidden:"Prijs op aanvraag",each:"/st",items:"artikelen",item:"artikel",refs2:"refs",viewcart:"Winkelmand bekijken",proshow:"Prijzen",prohide:"Prijzen verbergen",all:"Alle categorieën",cattitle:"Categorieën",search:"Zoek een product, een EAN…",noresult:"Geen product komt overeen met uw zoekopdracht.",askwa:"Hallo, ik wil graag een toegangscode voor de Barbertime handelsprijzen.",quotehdr:"Hallo, hier is mijn Barbertime offerteaanvraag:",codeok:"Prijzen ontgrendeld.",codeerr:"Ongeldige code.",nodesc:"Gedetailleerde beschrijving binnenkort."},
+  de:{eyebrow:"Pirates of the",title:"Kollektion",subtitle:"Die Profi-Serie",refs:"Produkte",lockmsg:"<b>Händlerpreise</b> sind unseren Wiederverkäufern vorbehalten.",unlock:"Code eingeben",askcode:"Zugang anfragen",ok:"Bestätigen",cart:"Warenkorb",total:"Summe netto",cartnote:"Angebot per WhatsApp an unseren Vertrieb.",sendwa:"Angebot senden",footer:"Profi-Katalog — Richtpreise",unit:"Pro Stück",box:"Pro Karton",addcart:"In den Warenkorb",added:"Hinzugefügt",emptycart:"Ihr Warenkorb ist leer.",pricehidden:"Preis auf Anfrage",each:"/St",items:"Artikel",item:"Artikel",refs2:"Ref.",viewcart:"Warenkorb ansehen",proshow:"Preise",prohide:"Preise ausblenden",all:"Alle Kategorien",cattitle:"Kategorien",search:"Produkt oder EAN suchen…",noresult:"Kein Produkt entspricht Ihrer Suche.",askwa:"Hallo, ich hätte gerne einen Zugangscode für die Barbertime-Händlerpreise.",quotehdr:"Hallo, hier ist meine Barbertime-Angebotsanfrage:",codeok:"Preise freigeschaltet.",codeerr:"Ungültige Code.",nodesc:"Ausführliche Beschreibung folgt."}
 };
 let lang="fr";
 const t=k=>(I18N[lang][k]??I18N.fr[k]??k);
@@ -447,15 +468,22 @@ function openModal(id){
       ${unlocked?`<div class="mprice">${fmt(p.pu)} <small style="font-size:13px;color:var(--muted);font-weight:400">${t('each')}</small></div>`:`<div class="mprice locked">${t('pricehidden')}</div>`}
       <div class="qtyblock">
         <div class="qtyrow"><div class="lbl"><b>${t('unit')}</b>${unlocked?`<small>${fmt(p.pu)}</small>`:''}</div>
-          <div class="stepper"><button data-s="unit" data-d="-1">−</button><span class="v" id="vu">0</span><button data-s="unit" data-d="1">+</button></div></div>
+          <div class="stepper"><button data-s="unit" data-d="-1">−</button><input class="qin" id="vu" type="number" inputmode="numeric" min="0" max="999" value="0"><button data-s="unit" data-d="1">+</button></div></div>
         ${hasBox?`<div class="qtyrow"><div class="lbl"><b>${t('box')}</b><small>${p.ubox} ${t('unit').toLowerCase()}${unlocked?' · '+fmt(p.pu*p.ubox):''}</small></div>
-          <div class="stepper"><button data-s="box" data-d="-1">−</button><span class="v" id="vb">0</span><button data-s="box" data-d="1">+</button></div></div>`:''}
+          <div class="stepper"><button data-s="box" data-d="-1">−</button><input class="qin" id="vb" type="number" inputmode="numeric" min="0" max="999" value="0"><button data-s="box" data-d="1">+</button></div></div>`:''}
       </div>
       <button class="addcart" id="addcart" disabled>${t('addcart')}</button>
     </div>`;
   const panel=document.getElementById('mpanel');
   panel.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{const s=b.dataset.s,d=+b.dataset.d;mQty[s]=Math.max(0,mQty[s]+d);
-    document.getElementById(s==='unit'?'vu':'vb').textContent=mQty[s];document.getElementById('addcart').disabled=(mQty.unit+mQty.box===0);});
+    document.getElementById(s==='unit'?'vu':'vb').value=mQty[s];document.getElementById('addcart').disabled=(mQty.unit+mQty.box===0);});
+  panel.querySelectorAll('.qin').forEach(inp=>{
+    inp.addEventListener('focus',()=>inp.select());
+    inp.addEventListener('input',()=>{const s=(inp.id==='vu')?'unit':'box';
+      let v=parseInt(inp.value,10);if(isNaN(v)||v<0)v=0;if(v>999)v=999;mQty[s]=v;
+      document.getElementById('addcart').disabled=(mQty.unit+mQty.box===0);});
+    inp.addEventListener('blur',()=>{const s=(inp.id==='vu')?'unit':'box';inp.value=mQty[s];});
+  });
   panel.querySelector('#addcart').onclick=()=>{if(mQty.unit>0)addToCart(id,'unit',mQty.unit);if(mQty.box>0)addToCart(id,'box',mQty.box);closeModal();toast(t('added'));};
   panel.querySelectorAll('[data-close]').forEach(x=>x.onclick=closeModal);
   const mod=document.getElementById('modal');
@@ -483,8 +511,11 @@ function renderDrawer(){
     const lp=unlocked?`<div class="lp">${fmt(linePrice(l))}</div>`:'';
     const d=document.createElement('div');d.className='line';
     d.innerHTML=`<img src="${p.img}"><div class="li"><h4>${p.nom}</h4><div class="sub">${sub}</div>${lp}
-      <div class="st"><button data-m="-1">−</button><span class="v">${l.qty}</span><button data-m="1">+</button></div></div>`;
-    d.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>setQty(k,l.qty+(+b.dataset.m)));body.appendChild(d);});}
+      <div class="st"><button data-m="-1">−</button><input class="qin qin-s" type="number" inputmode="numeric" min="0" max="999" value="${l.qty}"><button data-m="1">+</button></div></div>`;
+    d.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>setQty(k,l.qty+(+b.dataset.m)));
+    const qi=d.querySelector('.qin-s');
+    qi.addEventListener('focus',()=>qi.select());
+    qi.addEventListener('change',()=>{let v=parseInt(qi.value,10);if(isNaN(v)||v<0)v=0;if(v>999)v=999;setQty(k,v);});body.appendChild(d);});}
   const tot=document.getElementById('dtot');
   if(unlocked){tot.className='tv';tot.textContent=fmt(cartTotal());}else{tot.className='tv locked';tot.textContent=t('pricehidden');}
 }
@@ -497,18 +528,32 @@ function sendQuote(){if(!Object.keys(cart).length)return;let msg=t('quotehdr')+"
 function askCode(){window.open(`https://wa.me/${WA}?text=${encodeURIComponent(t('askwa'))}`,'_blank');}
 
 function tryCode(){const v=document.getElementById('codeInput').value.trim(),msg=document.getElementById('codemsg');
-  if(VALID_CODES.includes(v)){unlocked=true;msg.className='codemsg ok';msg.textContent=t('codeok');
-    document.getElementById('lockbar').style.display='none';document.getElementById('codewrap').classList.remove('show');refreshPrices();renderDrawer();}
+  if(VALID_CODES.includes(v)){unlocked=true;msg.className='codemsg';msg.textContent='';document.getElementById('lockbar').style.display='none';document.getElementById('codewrap').classList.remove('show');document.getElementById('codeInput').value='';refreshPrices();renderDrawer();renderProBtn();}
   else{msg.className='codemsg err';msg.textContent=t('codeerr');}}
 
 let toastT;function toast(m){const el=document.getElementById('toast');el.innerHTML=m;el.classList.remove('show');void el.offsetWidth;el.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('show'),2200);}
+
+
+function lockPrices(){unlocked=false;
+  document.getElementById('lockbar').style.display='';
+  document.getElementById('codemsg').textContent='';
+  refreshPrices();renderDrawer();renderProBtn();}
+function renderProBtn(){const b=document.getElementById('proBtn');if(!b)return;
+  b.textContent=unlocked?t('prohide'):t('proshow');
+  b.classList.toggle('unlocked',unlocked);}
+document.getElementById('proBtn').onclick=()=>{
+  if(unlocked){lockPrices();return;}
+  const lb=document.getElementById('lockbar');lb.style.display='';
+  document.getElementById('codewrap').classList.add('show');
+  lb.scrollIntoView({behavior:'smooth',block:'center'});
+  setTimeout(()=>document.getElementById('codeInput').focus(),350);};
 
 function applyLang(){document.querySelectorAll('[data-t]').forEach(el=>el.innerHTML=t(el.dataset.t));
   document.querySelectorAll('[data-tph]').forEach(el=>el.placeholder=t(el.dataset.tph));
   document.querySelectorAll('#langCur,.langCur2').forEach(el=>el.textContent=lang.toUpperCase());
   document.querySelectorAll('#langMenu button,#langMenu2 button').forEach(b=>b.classList.toggle('on',b.dataset.l===lang));
   document.documentElement.lang=lang;document.querySelectorAll('.langsel').forEach(s=>{s.value=lang;});
-  buildStructure();refreshPrices();applyView();renderDrawer();observeCards();}
+  buildStructure();refreshPrices();applyView();renderDrawer();observeCards();renderProBtn();}
 
 
 /* apparition animée des cartes au scroll (façon nishman.be) */
